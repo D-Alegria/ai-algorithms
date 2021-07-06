@@ -3,24 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Search : MonoBehaviour
+public class Searcher : MonoBehaviour
 {
     public GameObject startingNodeObject;
-    public ISearch searchStrategy;
+    private ISearch _searchStrategy;
 
     void Start()
     {
+        _searchStrategy = new DepthFirstSearch();
         Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
-        Node next = startingNode?.Neighbors?[0].node;
-        searchStrategy?.Search(startingNode);
-    }
-
-    void Update()
-    {
+        Debug.Log(_searchStrategy?.Search(startingNode, "E"));
     }
 }
 
 public interface ISearch
 {
-    public void Search(Node startingNode);
+    public bool Search(Node currentNode, String targetValue);
 }

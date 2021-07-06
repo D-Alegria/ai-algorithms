@@ -7,31 +7,35 @@ public class NodeObject : MonoBehaviour
     public string value;
     public GameObject[] neighborNodes;
     public int[] costs;
-    public Node Node { get; private set; }
+    public Node Node;
 
-    private void CreateNode()
+    private void PopulateNode()
     {
-        (Node, int)[] neighbors = new (Node, int)[neighborNodes.Length];
         try
         {
             for (int i = 0; i < neighborNodes.Length; i++)
             {
-                neighbors[i] = (neighborNodes[i].GetComponent<NodeObject>().Node, costs[i]);
+                Node.Neighbors[i] = (neighborNodes[i].GetComponent<NodeObject>().Node, costs[i]);
             }
         }
         catch (Exception e)
         {
             Debug.Log(e);
         }
-
-        Node = new Node(value!, neighbors!);
     }
 
     void Awake()
     {
-        CreateNode();
+        (Node, int)[] neighbors = new (Node, int)[neighborNodes.Length];
+        Node = new Node(value!, neighbors!);
+        
         TMP_Text text = GetComponentInChildren<TMP_Text>();
         text!.text = value!;
+    }
+
+    private void Start()
+    {
+        PopulateNode();
     }
 
     private void OnEnable()

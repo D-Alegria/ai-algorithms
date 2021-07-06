@@ -8,7 +8,7 @@ public class Node : IChangeNotifier
     {
         get
         {
-            Visit();
+            if (!Visited) Visit();
             return _value;
         }
         set => _value = value;
@@ -18,11 +18,7 @@ public class Node : IChangeNotifier
 
     public (Node node, int cost)[] Neighbors
     {
-        get
-        {
-            Visit();
-            return _neighbors.Length < 1 ? null : _neighbors;
-        }
+        get => _neighbors.Length < 1 ? null : _neighbors;
         set => _neighbors = value;
     }
 
