@@ -2,67 +2,101 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class NodeObject : MonoBehaviour
+namespace Core
 {
-    public string value;
-    public GameObject[] neighborNodes;
-    public int[] costs;
-    public Node Node;
-    private Renderer _nodeRenderer;
-    private static readonly int Albedo = Shader.PropertyToID("albedo");
-    private Ticker _ticker = Ticker.Instance;
-
-    void Awake()
+    public class NodeObject : MonoBehaviour
     {
-        (Node, int)[] neighbors = new (Node, int)[neighborNodes.Length];
-        Node = new Node(value!, neighbors!);
+        public string value;
+        public GameObject[] neighborNodes;
+        public int[] costs;
+        public GameObject edgeObject;
+        public Node Node;
+        private Renderer _nodeRenderer;
+        private static readonly int Albedo = Shader.PropertyToID("albedo");
+        private Ticker _ticker = Ticker.Instance;
 
-        TMP_Text text = GetComponentInChildren<TMP_Text>();
-        text!.text = value!;
-
-        _nodeRenderer = gameObject.GetComponent<Renderer>();
-    }
-
-    private void Start()
-    {
-        PopulateNode();
-    }
-
-    private void PopulateNode()
-    {
-        try
+        void Awake()
         {
-            for (int i = 0; i < neighborNodes.Length; i++)
+            (Node, int)[] neighbors = new (Node, int)[neighborNodes.Length];
+            Node = new Node(value!, neighbors!);
+
+            TMP_Text text = GetComponentInChildren<TMP_Text>();
+            text!.text = value!;
+
+            _nodeRenderer = gameObject.GetComponent<Renderer>();
+        }
+
+        private void Start()
+        {
+            PopulateNode();
+            DrawEdges();
+        }
+
+        private void PopulateNode()
+        {
+            try
             {
-                Node.Neighbors[i] = (neighborNodes[i].GetComponent<NodeObject>().Node, costs[i]);
+                for (int i = 0; i < neighborNodes.Length; i++)
+                {
+                    Node.Neighbors[i] = (neighborNodes[i].GetComponent<NodeObject>().Node, costs[i]);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
             }
         }
-        catch (Exception e)
+
+        private void DrawEdges()
         {
-            Debug.Log(e);
+            try
+            {
+                foreach (var node in neighborNodes)
+                {
+                    //Get parent transform and its position
+                    Transform parentTransform = transform;
+                    Vector3 position = parentTransform.position;
+                    //Create edge at parent's position
+                    GameObject edge = Instantiate(edgeObject, position, Quaternion.identity, parentTransform);
+                    //Rotate edge to point at designated neighbor node
+                    Vector3 nodeTransform = node.transform.position;
+                    edge.transform.LookAt(nodeTransform);
+                    //Shift edge to the right by 0.1 units
+                    edge.transform.Translate(0.1f, 0, 0, Space.Self);
+                    //Stretch edge to reach designated neighbor node
+                    float edgeLength = Vector3.Distance(position, nodeTransform) - 0.95f;
+                    SpriteRenderer edgeRenderer = edge.GetComponentInChildren<SpriteRenderer>();
+                    edgeRenderer.size = new Vector2(edgeLength, edgeRenderer.size.y);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
         }
-    }
 
-    private void OnEnable()
-    {
-        Node!.ONStateChanged += SetColor;
-    }
+        private void OnEnable()
+        {
+            Node!.ONStateChanged += SetColor;
+        }
 
-    private void OnDisable()
-    {
-        Node!.ONStateChanged -= SetColor;
-    }
+        private void OnDisable()
+        {
+            Node!.ONStateChanged -= SetColor;
+        }
 
-    private void SetColor()
-    {
-        StartCoroutine(WaitThenSetColor(1));
-        _ticker.Tick(1);
-    }
+        private void SetColor()
+        {
+            StartCoroutine(WaitThenSetColor());
+            _ticker.Tick(1);
+        }
 
-    private IEnumerator WaitThenSetColor(int seconds)
-    {
-        yield return new WaitForSeconds(_ticker.TimeInSeconds);
-        _nodeRenderer.material.color = Color.blue;
+        private IEnumerator WaitThenSetColor()
+        {
+            yield return new WaitForSeconds(_ticker.TimeInSeconds);
+            _nodeRenderer.material.color = Color.blue;
+        }
     }
 }
