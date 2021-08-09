@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Core;
 using Search_Algorithms;
 using TMPro;
@@ -27,17 +25,19 @@ public class Searcher : MonoBehaviour
                 searchTitle.text = "Depth Limited Search";
                 _searchStrategy = new DepthLimitedSearch(2);
                 break;
-            case SearchAlgorithms.IterativeDeepeningSearch:
-                searchTitle.text = "Iterative Deepening Depth First Search";
-                _searchStrategy = new IterativeDeepeningDFSearch(1);
+            case SearchAlgorithms.UniformCostSearch:
+                searchTitle.text = "Uniform Cost Search";
+                _searchStrategy = new UniformCostSearch();
                 break;
         }
+
         Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
         Debug.Log(_searchStrategy?.Search(startingNode, searchTarget));
     }
 }
 
-public enum SearchAlgorithms{
+public enum SearchAlgorithms
+{
     DepthFirstSearch,
     BreadthFirstSearch,
     UniformCostSearch,
