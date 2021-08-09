@@ -23,13 +23,17 @@ public class Searcher : MonoBehaviour
                 searchTitle.text = "Depth First Search";
                 _searchStrategy = new DepthFirstSearch();
                 break;
+            case SearchAlgorithms.BreadthFirstSearch:
+                searchTitle.text = "Breadth First Search";
+                _searchStrategy = new BreadthFirstSearch();
+                break;
+            case SearchAlgorithms.IterativeDeepeningSearch:
+                searchTitle.text = "Iterative Deepening Search";
+                _searchStrategy = new IterativeDeepeningSearch(2);
+                break;
             case SearchAlgorithms.DepthLimitedSearch:
                 searchTitle.text = "Depth Limited Search";
                 _searchStrategy = new DepthLimitedSearch(2);
-                break;
-            case SearchAlgorithms.IterativeDeepeningSearch:
-                searchTitle.text = "Iterative Deepening Depth First Search";
-                _searchStrategy = new IterativeDeepeningDFSearch(1);
                 break;
         }
         Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
