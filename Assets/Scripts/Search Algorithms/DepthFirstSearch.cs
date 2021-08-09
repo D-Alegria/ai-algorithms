@@ -1,20 +1,23 @@
 using System;
 
-public class DepthFirstSearch : ISearch
+namespace Search_Algorithms
 {
-    private bool _found;
-
-    public bool Search(Node currentNode, String targetValue)
+    public class DepthFirstSearch : ISearch
     {
-        if (currentNode.Value == targetValue) return _found = true;
+        private bool _found;
 
-        for (int i = 0; i < currentNode.Neighbors.Length; i++)
+        public bool Search(Node currentNode, String targetValue)
         {
-            if(currentNode.Neighbors[i].node.Visited) continue;
-            Search(currentNode.Neighbors[i].node, targetValue);
-            if (_found) return _found;
-        }
+            if (currentNode.Value == targetValue) return _found = true;
 
-        return false;
+            for (int i = 0; i < currentNode.Neighbors.Length; i++)
+            {
+                if(currentNode.Neighbors[i].node.Visited) continue;
+                Search(currentNode.Neighbors[i].node, targetValue);
+                if (_found) return _found;
+            }
+
+            return false;
+        }
     }
 }
