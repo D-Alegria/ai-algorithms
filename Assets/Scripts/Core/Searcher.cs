@@ -27,6 +27,10 @@ public class Searcher : MonoBehaviour
                 searchTitle.text = "Depth Limited Search";
                 _searchStrategy = new DepthLimitedSearch(2);
                 break;
+            case SearchAlgorithms.IterativeDeepeningSearch:
+                searchTitle.text = "Iterative Deepening Depth First Search";
+                _searchStrategy = new IterativeDeepeningDFSearch(1);
+                break;
         }
         Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
         Debug.Log(_searchStrategy?.Search(startingNode, searchTarget));
