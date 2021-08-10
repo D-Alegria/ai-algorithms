@@ -640,7 +640,7 @@ MonoBehaviour:
   startingNodeObject: {fileID: 2136772082}
   searchTitle: {fileID: 1286155541}
   searchTarget: 8
-  searchAlgorithm: 3
+  searchAlgorithm: 2
 --- !u!1 &898716707
 GameObject:
   m_ObjectHideFlags: 0
