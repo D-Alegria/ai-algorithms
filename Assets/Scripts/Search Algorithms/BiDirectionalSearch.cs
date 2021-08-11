@@ -46,13 +46,24 @@ namespace Search_Algorithms
                 // Add next headNode neighbour to _fromHead list, and next tailNode neighbour to _fromTail list, so that both can be retrieved during the next recursive Traverse() call
                 if (i < headNode.Neighbors.Length)
                 {
-                    if (headNode.Neighbors[i].node.Visited) continue;
-                    _fromHead.Add(headNode.Neighbors[i].node);
+                    // Loop from this index to the end of the headNode neighbours list to check if there is any ideal candidate as the next neighbour
+                    for (int j=i; j < headNode.Neighbors.Length; j++)
+                    {
+                        if (!headNode.Neighbors[j].node.Visited) break;
+                    }
+                    if (j == headNode.Neighbors.Length) continue;
+                    
+                    _fromHead.Add(headNode.Neighbors[j].node);
                 }
                 if (i < tailNode.Neighbors.Length)
                 {
-                    if (tailNode.Neighbors[i].node.Visited) continue;
-                    _fromTail.Add(tailNode.Neighbors[i].node);
+                    for (j=i; j < tailNode.Neighbors.Length; j++)
+                    {
+                        if (tailNode.Neighbors[j].node.Visited) continue;
+                    }
+                    if (j == tailNode.Neighbors.Length) continue;
+                    
+                    _fromTail.Add(tailNode.Neighbors[j].node);
                 }
                 
                 Traverse(currentIndex + 1);
