@@ -638,9 +638,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingNodeObject: {fileID: 2136772082}
+  endingNodeObject: {fileID: 177968783}
   searchTitle: {fileID: 1286155541}
   searchTarget: 8
-  searchAlgorithm: 2
+  searchAlgorithm: 5
 --- !u!1 &898716707
 GameObject:
   m_ObjectHideFlags: 0
