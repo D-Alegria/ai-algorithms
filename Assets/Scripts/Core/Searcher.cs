@@ -7,6 +7,7 @@ using UnityEngine;
 public class Searcher : MonoBehaviour
 {
     public GameObject startingNodeObject;
+    public GameObject endingNodeObject;
     public TMP_Text searchTitle;
     public string searchTarget;
     private ISearch _searchStrategy;
@@ -36,6 +37,11 @@ public class Searcher : MonoBehaviour
             case SearchAlgorithms.UniformCostSearch:
                 searchTitle.text = "Uniform Cost Search";
                 _searchStrategy = new UniformCostSearch();
+                break;
+            case SearchAlgorithms.BiDirectionalSearch:
+                searchTitle.text = "BiDirectional Search";
+                Node endingNode = endingNodeObject != null ? endingNodeObject.GetComponent<NodeObject>()?.Node : null;
+                _searchStrategy = new BiDirectionalSearch(endingNode);
                 break;
         }
 
