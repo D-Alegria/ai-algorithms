@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Random = System.Random;
 
 namespace Search_Algorithms
@@ -19,9 +18,7 @@ namespace Search_Algorithms
 
         private bool Expand(Node currentNode, string targetValue, int minCost)
         {
-            Debug.Log(minCost);
             if (currentNode.Value == targetValue) return true;
-            Debug.Log($"currentNode {currentNode.Value}");
             foreach (var node in currentNode.Neighbors)
             {
                 if (node.node.Visited) continue;
@@ -31,7 +28,7 @@ namespace Search_Algorithms
                     key = RandomString();
                 }
 
-                store.Add(key, node.cost);
+                store.Add(key, node.cost + minCost);
                 activeNodes.Add(key, node.node);
             }
 
@@ -41,12 +38,12 @@ namespace Search_Algorithms
             Node nextNode = activeNodes[costKey];
             activeNodes.Remove(costKey);
             store.Remove(costKey);
-            minCost += minimumCost;
+            minCost = minimumCost;
             return Expand(nextNode, targetValue, minCost);
         }
 
 
-        public static string RandomString()
+        private static string RandomString()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, 2)
