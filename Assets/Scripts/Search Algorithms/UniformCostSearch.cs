@@ -1,53 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Random = System.Random;
+﻿using Core;
 
 namespace Search_Algorithms
 {
     public class UniformCostSearch : ISearch
     {
-        Dictionary<string, Node> activeNodes = new Dictionary<String, Node>();
-        Dictionary<string, int> store = new Dictionary<string, int>();
-        private static Random random = new Random();
+        private readonly PriorityQueue<PriorityNode> _activeNodes = new PriorityQueue<PriorityNode>();
 
         public bool Search(Node currentNode, string targetValue)
         {
-            return Expand(currentNode, targetValue, 0);
-        }
+            _activeNodes.Enqueue(new PriorityNode(currentNode, 0));
 
-        private bool Expand(Node currentNode, string targetValue, int minCost)
-        {
-            if (currentNode.Value == targetValue) return true;
-            foreach (var node in currentNode.Neighbors)
+            while (_activeNodes.Count() != 0)
             {
-                if (node.node.Visited) continue;
-                string key = "";
-                while (!store.ContainsKey(key) && key.Length < 1)
-                {
-                    key = RandomString();
-                }
+                var topPriorityNode = _activeNodes.Dequeue();
+                var currentHead = topPriorityNode.Node;
+                var currentMinimumCost = topPriorityNode.Cost;
+                if (currentHead.Value == targetValue) return true;
 
-                store.Add(key, node.cost + minCost);
-                activeNodes.Add(key, node.node);
+                foreach (var node in currentHead.Neighbors)
+                {
+                    if (node.node.Visited) continue;
+                    _activeNodes.Enqueue(new PriorityNode(node.node, node.cost + currentMinimumCost));
+                }
             }
 
-            if (activeNodes.Count == 0) return false;
-            int minimumCost = store.Values.Min();
-            string costKey = store.FirstOrDefault(pair => pair.Value == minimumCost).Key;
-            Node nextNode = activeNodes[costKey];
-            activeNodes.Remove(costKey);
-            store.Remove(costKey);
-            minCost = minimumCost;
-            return Expand(nextNode, targetValue, minCost);
-        }
-
-
-        private static string RandomString()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, 2)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return false;
         }
     }
 }
