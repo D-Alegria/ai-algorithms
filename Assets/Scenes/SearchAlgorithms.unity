@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.data[0]
@@ -223,11 +223,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
@@ -308,15 +308,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[2]
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
@@ -411,19 +411,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[2]
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[3]
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
@@ -641,7 +641,7 @@ MonoBehaviour:
   endingNodeObject: {fileID: 177968783}
   searchTitle: {fileID: 1286155541}
   searchTarget: 8
-  searchAlgorithm: 5
+  searchAlgorithm: 2
 --- !u!1 &898716707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,7 +1121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
@@ -1206,15 +1206,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[2]
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
@@ -1381,7 +1381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
@@ -1462,15 +1462,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[0]
-      value: 1
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[1]
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: costs.Array.data[2]
-      value: 1
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4488489150362932848, guid: 8abd3a753a6df3f4db51e714f75b1682, type: 3}
       propertyPath: neighborNodes.Array.size
