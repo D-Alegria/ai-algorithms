@@ -1,4 +1,3 @@
-using System;
 using Core;
 using Search_Algorithms;
 using TMPro;
@@ -58,9 +57,4 @@ public enum SearchAlgorithms
     IterativeDeepeningSearch,
     DepthLimitedSearch,
     BiDirectionalSearch,
-}
-
-public interface ISearch
-{
-    public bool Search(Node currentNode, String targetValue);
 }
