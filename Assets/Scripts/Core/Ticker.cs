@@ -1,22 +1,23 @@
-using UnityEngine;
-
-public sealed class Ticker
+namespace Core
 {
-    private Ticker()
+    public sealed class Ticker
     {
-    }
+        private Ticker()
+        {
+        }
 
-    private static Ticker _instance;
+        private static Ticker _instance;
 
-    public static Ticker Instance
-    {
-        get { return _instance ??= new Ticker(); }
-    }
+        public static Ticker Instance
+        {
+            get { return _instance ??= new Ticker(); }
+        }
 
-    public int TimeInSeconds;
+        public int TimeInSeconds;
 
-    public void Tick(int seconds)
-    {
-        TimeInSeconds += seconds;
+        public void Tick(int seconds)
+        {
+            TimeInSeconds += seconds;
+        }
     }
 }

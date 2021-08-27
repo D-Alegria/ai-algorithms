@@ -1,4 +1,5 @@
 using System;
+using Core;
 
 namespace Search_Algorithms
 {

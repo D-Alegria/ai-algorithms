@@ -14,7 +14,6 @@ namespace Core
         public GameObject edgeObject;
         public Node Node;
         private Renderer _nodeRenderer;
-        private static readonly int Albedo = Shader.PropertyToID("albedo");
         private Ticker _ticker = Ticker.Instance;
 
         void Awake()
