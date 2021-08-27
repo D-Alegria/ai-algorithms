@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Core;
+using UnityEngine;
 
 namespace Genetic_Algorithm
 {
-    public class GeneticAlgorithm
+    public partial class GeneticAlgorithm
     {
-        private List<Chromosome> population;
-        private static readonly Random Random = new Random();
-        private static readonly object SyncLock = new object();
+        private readonly int[,] _environment;
+        private readonly int _chromosomeLength;
+        private readonly int _populationSize;
+        private readonly int _generationLimit;
 
-        public List<Chromosome> GeneratePopulation(int length)
+        public GeneticAlgorithm(int[,] environment, int populationSize, int generationLimit)
         {
-            List<Chromosome> chromosomes = new List<Chromosome>();
-            for (int i = 0; i < length; i++)
-            {
-                chromosomes.Add(new Chromosome().GenerateChromosome(10));
-            }
-
-            population = chromosomes;
-            return chromosomes;
+            _environment = environment;
+            _chromosomeLength = environment.GetLength(0);
+            _populationSize = populationSize;
+            _population = new Chromosome[populationSize];
+            _generationLimit = generationLimit;
         }
 
+        public void RunEvolution()
+        {
+            GeneratePopulation();
+            GenerateFitnessParameters();
+        }
+
+        // Select
+        // Crossover
         public (Chromosome, Chromosome) SinglePointCrossOver(Chromosome chromosomeA, Chromosome chromosomeB)
         {
             if (chromosomeA.Genes.Length != chromosomeB.Genes.Length)
@@ -30,17 +35,15 @@ namespace Genetic_Algorithm
                 return (chromosomeA, chromosomeB);
             }
 
-            lock (SyncLock)
-            {
-                var point = Random.Next(chromosomeA.Genes.Length);
-                var newGenesA = chromosomeA.Genes.Take(point).Concat(chromosomeB.Genes.Skip(point)).ToArray();
-                var newGenesB = chromosomeB.Genes.Take(point).Concat(chromosomeA.Genes.Skip(point)).ToArray();
+            var point = RandomNumber.Generate(chromosomeA.Genes.Length);
+            var newGenesA = chromosomeA.Genes.Take(point).Concat(chromosomeB.Genes.Skip(point)).ToArray();
+            var newGenesB = chromosomeB.Genes.Take(point).Concat(chromosomeA.Genes.Skip(point)).ToArray();
 
-                chromosomeA.Genes = newGenesA;
-                chromosomeB.Genes = newGenesB;
-
-                return (chromosomeA, chromosomeB);
-            }
+            return (
+                new Chromosome(newGenesA, chromosomeA.IsColumnWise, chromosomeA.PathSwitch),
+                new Chromosome(newGenesB, chromosomeB.IsColumnWise, chromosomeB.PathSwitch)
+            );
         }
+        // Mutate
     }
 }
