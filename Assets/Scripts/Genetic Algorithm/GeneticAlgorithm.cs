@@ -22,13 +22,15 @@ namespace Genetic_Algorithm
         public void RunEvolution()
         {
             GeneratePopulation();
+            EvaluateFitness();
             for (var i = 1; i < _generationLimit; i++)
             {
-                EvaluateFitness();
                 Evolve();
+                EvaluateFitness();
+                if(_fitnessValues[_fitnessValues.Length - 1].fitness >= 99f) break;
             }
         }
-        
+
         public void NotifyObservers()
         {
             ONEvaluatedFitness?.Invoke(_fitnessValues);

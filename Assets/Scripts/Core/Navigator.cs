@@ -22,7 +22,7 @@ namespace Core
             {
                 {1, 0, 1, 1, 1, 1, 1},
                 {1, 0, 1, 1, 1, 1, 1},
-                {1, 0, 1, 0, 0, 0, 1},
+                {1, 0, 1, 0, 1, 1, 1},
                 {1, 0, 1, 0, 1, 1, 1},
                 {1, 1, 1, 0, 1, 0, 0},
                 {1, 1, 1, 0, 1, 1, 1},
@@ -39,13 +39,13 @@ namespace Core
                 }
             }
             
-            _geneticAlgorithm = new GeneticAlgorithm(_grid, 16, 1000);
+            _geneticAlgorithm = new GeneticAlgorithm(_grid, 10, 1000);
             _fittestPaths = new Queue<Vector3[]>();
         }
 
         void Start()
         {
-            InvokeRepeating(nameof(RenderFittestPaths), 0, renderRate);
+            InvokeRepeating(nameof(RenderFittestPaths), renderRate, renderRate);
             _geneticAlgorithm.RunEvolution();
         }
 
@@ -64,10 +64,6 @@ namespace Core
             var fittestIndividual = paths[paths.Length - 1].chromosome;
             // var fittestIndividual = paths[0].chromosome;
             var fittestPath = fittestIndividual.Genes;
-
-            // Debug.Log(fittestIndividual.ToString());
-            // Debug.Log(paths[paths.Length - 1].fitness);
-            // Debug.Log(paths[0].fitness);
 
             List<Vector3> linePoints = new List<Vector3>();
             linePoints.Add(new Vector3(0, 0));
@@ -110,7 +106,7 @@ namespace Core
         private void RenderFittestPaths()
         {
             if (_fittestPaths.Count <= 0) return;
-            // Debug.Log(gen);
+            Debug.Log(gen);
             var linePoints = _fittestPaths.Dequeue();
             pathRenderer.positionCount = linePoints.Length;
             pathRenderer.SetPositions(linePoints);

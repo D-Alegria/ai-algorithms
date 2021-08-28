@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core;
 using UnityEngine;
@@ -138,28 +139,61 @@ namespace Genetic_Algorithm
         private int GetPathTurns(Gene[] genes, int[] pathSwitch)
         {
             int numberOfTurns = 0;
+            List<(int row, int col)> pathPoints = new List<(int row, int col)>();
 
-            for (int i = 0; i < genes.Length - 1; i++)
+            for (int i = 1; i < genes.Length; i++)
             {
-                var geneA = genes[i];
-                var geneB = genes[i + 1];
+                var geneA = genes[i - 1];
+                var geneB = genes[i];
 
-                //Calculating number of turns required in moving from geneA and geneB taking the switching points into consideration
-                if (pathSwitch[0] != pathSwitch[1] && Array.Exists(pathSwitch, el => el == i))
+                // checking whether geneA is column or row wise and setting environment location pointer accordingly
+                (int row, int col) locationA = (!geneA.IsColumnWise ^ (i - 1 > pathSwitch[0] && i - 1 <= pathSwitch[1]))
+                    ? (geneA.PathLocation.locus, geneA.PathLocation.allelle)
+                    : (geneA.PathLocation.allelle, geneA.PathLocation.locus);
+
+                // checking whether geneB is column or row wise and setting environment location pointer accordingly
+                (int row, int col) locationB = (!geneB.IsColumnWise ^ (i > pathSwitch[0] && i <= pathSwitch[1]))
+                    ? (geneB.PathLocation.locus, geneB.PathLocation.allelle)
+                    : (geneB.PathLocation.allelle, geneB.PathLocation.locus);
+
+                if (geneA.PathDirection == PathDirection.Horizontal)
                 {
-                    if (geneB.PathLocation.locus != geneA.PathLocation.allelle &&
-                        geneB.PathLocation.allelle != geneA.PathLocation.locus)
-                    {
-                        numberOfTurns += 1;
-                    }
+                    // First moving horizontally from locationA's column to locationB's column and adding all detected collisions
+                    pathPoints.Add((locationA.row, locationA.col));
+                    pathPoints.Add((locationA.row, locationB.col));
                 }
                 else
                 {
-                    if (geneB.PathLocation.locus != geneA.PathLocation.locus &&
-                        geneB.PathLocation.allelle != geneA.PathLocation.allelle)
-                    {
-                        numberOfTurns += 1;
-                    }
+                    // First moving vertically from locationA's row to locationB's row and adding all detected collisions
+                    pathPoints.Add((locationA.row, locationA.col));
+                    pathPoints.Add((locationB.row, locationA.col));
+                }
+
+                // Add last pathPoint
+                if (i == genes.Length - 1) pathPoints.Add((locationB.row, locationB.col));
+            }
+
+            for (int a = 1, b = 2; b < pathPoints.Count; a++, b++)
+            {
+                if (pathPoints[a].row > pathPoints[a - 1].row)
+                {
+                    if (pathPoints[b].row < pathPoints[a].row) numberOfTurns += 2;
+                    if (pathPoints[b].col != pathPoints[a].col) numberOfTurns++;
+                }
+                if (pathPoints[a].row < pathPoints[a - 1].row)
+                {
+                    if (pathPoints[b].row > pathPoints[a].row) numberOfTurns += 2;
+                    if (pathPoints[b].col != pathPoints[a].col) numberOfTurns++;
+                }
+                if (pathPoints[a].col > pathPoints[a - 1].col)
+                {
+                    if (pathPoints[b].col < pathPoints[a].col) numberOfTurns += 2;
+                    if (pathPoints[b].row != pathPoints[a].row) numberOfTurns++;
+                }
+                if (pathPoints[a].col < pathPoints[a - 1].col)
+                {
+                    if (pathPoints[b].col > pathPoints[a].col) numberOfTurns += 2;
+                    if (pathPoints[b].row != pathPoints[a].row) numberOfTurns++;
                 }
             }
 
@@ -182,8 +216,7 @@ namespace Genetic_Algorithm
                 if (double.IsNaN(fCollisions)) fCollisions = 1;
                 if (double.IsNaN(fNumberOfTurns)) fNumberOfTurns = 1;
 
-                // var fPath = fCollisions * (fLength + 2 * fNumberOfTurns) * 100 / (3);
-                var fPath = fCollisions * (4 * fLength + 2 * fNumberOfTurns) * 100 / 6;
+                var fPath = fCollisions * (fLength + 3f * fNumberOfTurns) * 100 / 4f;
 
                 if (_amountsOfCollisions[i] > 0)
                 {

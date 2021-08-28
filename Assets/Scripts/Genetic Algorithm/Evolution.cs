@@ -16,15 +16,12 @@ namespace Genetic_Algorithm
             {
                 var (firstChild, secondChild) = SinglePointCrossOver(SelectParent(), SelectParent());
                 newGeneration[individual] = Mutate(firstChild);
-                // Debug.Log($"\n{individual} - {_population[individual]}");
                 if (individual + 1 < _populationSize)
                 {
                     newGeneration[individual + 1] = Mutate(secondChild);
-                    // Debug.Log($"\n{individual + 1} - {_population[individual + 1]}");
                 }
             }
 
-            Debug.Log(newGeneration[0]);
             _population = newGeneration;
         }
 
