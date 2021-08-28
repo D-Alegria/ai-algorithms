@@ -21,15 +21,15 @@ public class FloorBoard : MonoBehaviour
         {
             case 0:
                 _boardRenderer.material.color = purp;
-                _boardRenderer.material.DisableKeyword("_EMMISION");
+                _boardRenderer.material.DisableKeyword("_EMISSION");
                 break;
             case 9:
                 _boardRenderer.material.color = neon;
-                _boardRenderer.material.EnableKeyword("_EMMISION");
+                _boardRenderer.material.EnableKeyword("_EMISSION");
                 break;
             default:
                 _boardRenderer.material.color = Color.white;
-                _boardRenderer.material.DisableKeyword("_EMMISION");
+                _boardRenderer.material.DisableKeyword("_EMISSION");
                 break;
         }
     }

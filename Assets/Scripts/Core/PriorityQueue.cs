@@ -57,7 +57,6 @@ public interface IPrioritizable
     /// <summary>
     /// Priority of the item.
     /// </summary>
-    Node Node { get; set; }
 
     int Cost { get; set; }
 }

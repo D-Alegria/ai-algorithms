@@ -1,4 +1,5 @@
 using System;
+using Core;
 
 public interface IObservable
 {
@@ -8,4 +9,9 @@ public interface IObservable
 public interface IChangeNotifier : IObservable
 {
     event Action ONStateChanged;
+}
+
+public interface IGeneticAlgorithmNotifier : IObservable
+{
+    event Action<(Chromosome, float)[]> ONEvaluatedFitness;
 }

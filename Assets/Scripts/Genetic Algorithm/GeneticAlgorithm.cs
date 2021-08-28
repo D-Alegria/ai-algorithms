@@ -1,10 +1,9 @@
-﻿using System.Linq;
+﻿using System;
 using Core;
-using UnityEngine;
 
 namespace Genetic_Algorithm
 {
-    public partial class GeneticAlgorithm
+    public partial class GeneticAlgorithm : IGeneticAlgorithmNotifier
     {
         private readonly int[,] _environment;
         private readonly int _chromosomeLength;
@@ -23,27 +22,18 @@ namespace Genetic_Algorithm
         public void RunEvolution()
         {
             GeneratePopulation();
-            GenerateFitnessParameters();
-        }
-
-        // Select
-        // Crossover
-        public (Chromosome, Chromosome) SinglePointCrossOver(Chromosome chromosomeA, Chromosome chromosomeB)
-        {
-            if (chromosomeA.Genes.Length != chromosomeB.Genes.Length)
+            for (var i = 1; i < _generationLimit; i++)
             {
-                return (chromosomeA, chromosomeB);
+                EvaluateFitness();
+                Evolve();
             }
-
-            var point = RandomNumber.Generate(chromosomeA.Genes.Length);
-            var newGenesA = chromosomeA.Genes.Take(point).Concat(chromosomeB.Genes.Skip(point)).ToArray();
-            var newGenesB = chromosomeB.Genes.Take(point).Concat(chromosomeA.Genes.Skip(point)).ToArray();
-
-            return (
-                new Chromosome(newGenesA, chromosomeA.IsColumnWise, chromosomeA.PathSwitch),
-                new Chromosome(newGenesB, chromosomeB.IsColumnWise, chromosomeB.PathSwitch)
-            );
         }
-        // Mutate
+        
+        public void NotifyObservers()
+        {
+            ONEvaluatedFitness?.Invoke(_fitnessValues);
+        }
+
+        public event Action<(Chromosome, float)[]> ONEvaluatedFitness;
     }
 }

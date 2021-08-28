@@ -2,16 +2,14 @@
 
 namespace Core
 {
-    public readonly struct Chromosome
+    public struct Chromosome
     {
         public Gene[] Genes { get; }
-        public bool IsColumnWise { get; }
-        public int[] PathSwitch { get; }
-        
-        public Chromosome(Gene[] genes, bool isColumnWise, int[] pathSwitch)
+        public int[] PathSwitch { get; set; }
+
+        public Chromosome(Gene[] genes, int[] pathSwitch)
         {
             Genes = genes;
-            IsColumnWise = isColumnWise;
             PathSwitch = pathSwitch;
         }
 
@@ -23,7 +21,6 @@ namespace Core
                 chromosome.Append($"{gene}\n");
             }
 
-            chromosome.Append($"Is Column-wise: {IsColumnWise}\n");
             chromosome.Append($"Path Switch: {string.Join(",", PathSwitch)}\n");
 
             return chromosome.ToString();

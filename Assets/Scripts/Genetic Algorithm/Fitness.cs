@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Core;
 using UnityEngine;
 
@@ -8,8 +9,18 @@ namespace Genetic_Algorithm
     {
         //fitness parameters
         private int[] _pathLengths;
-        private int[] _amountsOfTurns;
         private int[] _amountsOfCollisions;
+        private int[] _amountsOfTurns;
+        private int _longestPathLength;
+        private int _lengthFactor;
+        private int _highestCollisions;
+        private int _collisionFactor;
+        private int _highestTurns;
+
+        private int _turnFactor;
+
+        // fitness values
+        private (Chromosome chromosome, float fitness)[] _fitnessValues;
 
         private void GenerateFitnessParameters() // Generates values for the parameters used in evaluating fitness
         {
@@ -22,9 +33,16 @@ namespace Genetic_Algorithm
                 Chromosome chromosome = _population[individual];
                 _pathLengths[individual] = GetPathLength(chromosome.Genes, chromosome.PathSwitch);
                 _amountsOfCollisions[individual] =
-                    GetPathCollisions(chromosome.Genes, chromosome.PathSwitch, chromosome.IsColumnWise);
+                    GetPathCollisions(chromosome.Genes, chromosome.PathSwitch);
                 _amountsOfTurns[individual] = GetPathTurns(chromosome.Genes, chromosome.PathSwitch);
             }
+
+            _longestPathLength = _pathLengths.Max();
+            _lengthFactor = _longestPathLength - _pathLengths.Min();
+            _highestCollisions = _amountsOfCollisions.Max();
+            _collisionFactor = _highestCollisions - _amountsOfCollisions.Min();
+            _highestTurns = _amountsOfTurns.Max();
+            _turnFactor = _highestTurns - _amountsOfTurns.Min();
         }
 
         private int GetPathLength(Gene[] genes, int[] pathSwitch)
@@ -52,7 +70,7 @@ namespace Genetic_Algorithm
             return length;
         }
 
-        private int GetPathCollisions(Gene[] genes, int[] pathSwitch, bool isColumnWise)
+        private int GetPathCollisions(Gene[] genes, int[] pathSwitch)
         {
             int collisions = 0;
 
@@ -63,12 +81,12 @@ namespace Genetic_Algorithm
                 var geneB = genes[i + 1];
 
                 // checking whether geneA is column or row wise and setting environment location pointer accordingly
-                (int row, int col) locationA = (!isColumnWise ^ (i > pathSwitch[0] && i <= pathSwitch[1]))
+                (int row, int col) locationA = (!geneA.IsColumnWise ^ (i > pathSwitch[0] && i <= pathSwitch[1]))
                     ? (geneA.PathLocation.locus, geneA.PathLocation.allelle)
                     : (geneA.PathLocation.allelle, geneA.PathLocation.locus);
 
                 // checking whether geneB is column or row wise and setting environment location pointer accordingly
-                (int row, int col) locationB = (!isColumnWise ^ (i + 1 > pathSwitch[0] && i + 1 <= pathSwitch[1]))
+                (int row, int col) locationB = (!geneB.IsColumnWise ^ (i + 1 > pathSwitch[0] && i + 1 <= pathSwitch[1]))
                     ? (geneB.PathLocation.locus, geneB.PathLocation.allelle)
                     : (geneB.PathLocation.allelle, geneB.PathLocation.locus);
 
@@ -148,9 +166,37 @@ namespace Genetic_Algorithm
             return numberOfTurns;
         }
 
-        private int EvaluateFitness(Chromosome chromosome)
+        private void EvaluateFitness()
         {
-            return 100;
+            GenerateFitnessParameters();
+
+            _fitnessValues = new (Chromosome, float)[_populationSize];
+
+            for (int i = 0; i < _fitnessValues.Length; i++)
+            {
+                var fLength = (_longestPathLength - _pathLengths[i]) / (float) _lengthFactor;
+                var fCollisions = (_highestCollisions - _amountsOfCollisions[i]) / (float) _collisionFactor;
+                var fNumberOfTurns = (_highestTurns - _amountsOfTurns[i]) / (float) _turnFactor;
+
+                if (double.IsNaN(fLength)) fLength = 1;
+                if (double.IsNaN(fCollisions)) fCollisions = 1;
+                if (double.IsNaN(fNumberOfTurns)) fNumberOfTurns = 1;
+
+                // var fPath = fCollisions * (fLength + 2 * fNumberOfTurns) * 100 / (3);
+                var fPath = fCollisions * (4 * fLength + 2 * fNumberOfTurns) * 100 / 6;
+
+                if (_amountsOfCollisions[i] > 0)
+                {
+                    fPath = 0.1f * fPath / (float) Math.Pow(_amountsOfCollisions[i], 2);
+                }
+
+                _fitnessValues[i] = (_population[i], fPath);
+            }
+
+            Array.Sort(_fitnessValues, (a, b) => a.fitness.CompareTo(b.fitness));
+
+            NotifyObservers();
+            Debug.Log($"{string.Join("\n \n", _fitnessValues)}");
         }
     }
 }
