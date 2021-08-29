@@ -229,7 +229,7 @@ namespace Genetic_Algorithm
             Array.Sort(_fitnessValues, (a, b) => a.fitness.CompareTo(b.fitness));
 
             NotifyObservers();
-            Debug.Log($"{string.Join("\n \n", _fitnessValues)}");
+            // Debug.Log($"{string.Join("\n \n", _fitnessValues)}");
         }
     }
 }
