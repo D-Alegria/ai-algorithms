@@ -52,8 +52,10 @@ namespace Core
         {
             try
             {
-                foreach (var node in neighborNodes)
+                for (var i = 0; i < neighborNodes.Length; i++)
                 {
+                    var node = neighborNodes[i];
+                    var cost = costs[i];
                     //Get parent transform and its position
                     Transform parentTransform = transform;
                     Vector3 position = parentTransform.position;
@@ -68,6 +70,8 @@ namespace Core
                     float edgeLength = Vector3.Distance(position, nodeTransform) - 0.95f;
                     SpriteRenderer edgeRenderer = edge.GetComponentInChildren<SpriteRenderer>();
                     edgeRenderer.size = new Vector2(edgeLength, edgeRenderer.size.y);
+                    TMP_Text costText = edge.GetComponentInChildren<TMP_Text>();
+                    costText.text = cost.ToString();
                 }
             }
             catch (Exception e)
@@ -95,7 +99,7 @@ namespace Core
         private IEnumerator WaitThenSetColor()
         {
             yield return new WaitForSeconds(_ticker.TimeInSeconds);
-            _nodeRenderer.material.color = Color.blue;
+            _nodeRenderer.material.color = Color.magenta;
         }
     }
 }
