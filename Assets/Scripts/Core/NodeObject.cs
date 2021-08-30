@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Core
 {
@@ -32,11 +31,25 @@ namespace Core
             PopulateNode();
             DrawEdges();
         }
-        
+
         protected override void ONSessionStateChanged(SessionState state)
         {
-            Debug.Log("gggggg");
-            if(state is SessionState.NotRunning) _nodeRenderer.material.color = Color.white;
+            switch (state)
+            {
+                case SessionState.Running:
+                    Node!.ONStateChanged += SetColor;
+                    PopulateNode();
+                    break;
+                case SessionState.NotRunning:
+                    StopAllCoroutines();
+                    _nodeRenderer.material.color = Color.white;
+                    (Node, int)[] neighbors = new (Node, int)[neighborNodes.Length];
+                    Node = new Node(value!, neighbors!);
+                    Node!.ONStateChanged -= SetColor;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
         }
 
         private void PopulateNode()
@@ -62,20 +75,27 @@ namespace Core
                 {
                     var node = neighborNodes[i];
                     var cost = costs[i];
+
                     //Get parent transform and its position
                     Transform parentTransform = transform;
                     Vector3 position = parentTransform.position;
+
                     //Create edge at parent's position
                     GameObject edge = Instantiate(edgeObject, position, Quaternion.identity, parentTransform);
+
                     //Rotate edge to point at designated neighbor node
                     Vector3 nodeTransform = node.transform.position;
                     edge.transform.LookAt(nodeTransform);
+
                     //Shift edge to the right by 0.1 units
                     edge.transform.Translate(0.1f, 0, 0, Space.Self);
+
                     //Stretch edge to reach designated neighbor node
                     float edgeLength = Vector3.Distance(position, nodeTransform) - 0.95f;
                     SpriteRenderer edgeRenderer = edge.GetComponentInChildren<SpriteRenderer>();
                     edgeRenderer.size = new Vector2(edgeLength, edgeRenderer.size.y);
+
+                    // Display Cost
                     TMP_Text costText = edge.GetComponentInChildren<TMP_Text>();
                     costText.text = cost.ToString();
                 }
@@ -84,16 +104,6 @@ namespace Core
             {
                 Debug.Log(e);
             }
-        }
-
-        private void OnEnable()
-        {
-            Node!.ONStateChanged += SetColor;
-        }
-
-        private void OnDisable()
-        {
-            Node!.ONStateChanged -= SetColor;
         }
 
         private void SetColor()

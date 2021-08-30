@@ -1,76 +1,51 @@
-using Core;
 using Search_Algorithms;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Searcher : MonoBehaviour
+namespace Core
 {
-    public GameObject startingNodeObject;
-    public GameObject endingNodeObject;
-    public TMP_Dropdown searchTitle;
-    public string searchTarget;
-    private ISearch _searchStrategy;
-    private bool _isRunning;
-
-    public SearchAlgorithms searchAlgorithm;
-
-    void Start()
+    public class Searcher : MonoBehaviour
     {
-        searchTitle.onValueChanged.AddListener(delegate { SetAlgorithm(); });
-        SetAlgorithm();
-        Debug.Log(searchTitle.value);
-    }
+        public GameObject startingNodeObject;
+        public TMP_Dropdown searchTitle;
+        public string searchTarget;
+        private ISearch _searchStrategy;
+        private bool _isRunning;
 
-    private void SetAlgorithm()
-    {
-        switch (searchTitle.value)
+        void OnEnable()
         {
-            case 0:
-                _searchStrategy = new DepthFirstSearch();
-                break;
-            case 1:
-                _searchStrategy = new BreadthFirstSearch();
-                break;
-            case 2:
-                _searchStrategy = new IterativeDeepeningSearch(2);
-                break;
-            case 3:
-                _searchStrategy = new DepthLimitedSearch(2);
-                break;
-            case 4:
-                _searchStrategy = new UniformCostSearch();
-                break;
-            case 5:
-                Node endingNode = endingNodeObject != null ? endingNodeObject.GetComponent<NodeObject>()?.Node : null;
-                _searchStrategy = new BiDirectionalSearch(endingNode);
-                break;
+            searchTitle.onValueChanged.AddListener(delegate { SetAlgorithm(); });
+        }
+
+        private void SetAlgorithm()
+        {
+            _searchStrategy = searchTitle.value switch
+            {
+                0 => new DepthFirstSearch(),
+                1 => new BreadthFirstSearch(),
+                2 => new IterativeDeepeningSearch(2),
+                3 => new DepthLimitedSearch(2),
+                4 => new UniformCostSearch(),
+                _ => _searchStrategy
+            };
+        }
+
+        public void Search()
+        {
+            if (!_isRunning)
+            {
+                _isRunning = true;
+                Session.Instance.StartSession();
+                Ticker.Instance.TimeInSeconds = 0;
+                Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
+                SetAlgorithm();
+                _searchStrategy?.Search(startingNode, searchTarget);
+            }
+            else
+            {
+                Session.Instance.EndSession();
+                _isRunning = false;
+            }
         }
     }
-
-    public void Search()
-    {
-        if (!_isRunning)
-        {
-            Session.Instance.StartSession();
-            _isRunning = true;
-            Node startingNode = startingNodeObject != null ? startingNodeObject.GetComponent<NodeObject>()?.Node : null;
-            _searchStrategy?.Search(startingNode, searchTarget);
-        }
-        else
-        {
-            Session.Instance.EndSession();
-            _isRunning = false;
-        }
-    }
-}
-
-public enum SearchAlgorithms
-{
-    DepthFirstSearch,
-    BreadthFirstSearch,
-    UniformCostSearch,
-    IterativeDeepeningSearch,
-    DepthLimitedSearch,
-    BiDirectionalSearch,
 }
