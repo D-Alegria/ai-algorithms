@@ -60,13 +60,13 @@ namespace Genetic_Algorithm
         // Mutate
         private Chromosome Mutate(Chromosome chromosome)
         {
-            var mutationProbability = 0.6f;
+            var mutationProbability = 0.45f;
             
             for (var locus = 0; locus < chromosome.Genes.Length; locus++)
             {
                 Gene mutatedGene = chromosome.Genes[locus];
                 
-                if (RandomNumber.Generate(11) / 10f < mutationProbability)
+                if (RandomNumber.Generate(101) / 100f < mutationProbability)
                 {
                     var direction = RandomNumber.Generate(2);
                     var pathDirection = Enum.GetValues(typeof(PathDirection));
@@ -95,8 +95,3 @@ namespace Genetic_Algorithm
         }
     }
 }
-
-// switch: [0, 5]
-//       l  a
-// ch-0: 0, 1
-// ch-1: 1, 0

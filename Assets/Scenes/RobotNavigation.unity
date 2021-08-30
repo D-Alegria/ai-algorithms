@@ -885,7 +885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generationLimit: 4000
   population: 200
-  fitnessTolerance: 90
+  fitnessTolerance: 100
   floorBoard: {fileID: 6947236823364323960, guid: 244d739c831ed954b859422186df7536, type: 3}
   pathRenderer: {fileID: 2019745906}
   stats: {fileID: 2115105122}
