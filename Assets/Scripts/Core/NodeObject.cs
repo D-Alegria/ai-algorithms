@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace Core
 {
-    public class NodeObject : MonoBehaviour
+    public class NodeObject : SessionMember
     {
         public string value;
         public GameObject[] neighborNodes;
@@ -31,6 +31,12 @@ namespace Core
         {
             PopulateNode();
             DrawEdges();
+        }
+        
+        protected override void ONSessionStateChanged(SessionState state)
+        {
+            Debug.Log("gggggg");
+            if(state is SessionState.NotRunning) _nodeRenderer.material.color = Color.white;
         }
 
         private void PopulateNode()
