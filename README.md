@@ -1,2 +1,2 @@
 # ai-algorithms
-CSC 514
+Implementation of Genetic Algorithm for path planning as well as uninformed search implementations
